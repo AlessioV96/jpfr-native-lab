@@ -1,6 +1,6 @@
 # JPFR — laboratoire natif Apple, sources 0.1.0
 
-Ce dossier prépare un essai japonais → français avec le framework Translation d’Apple. **Les sources ne sont pas encore compilées avec Xcode et aucun résultat de traduction Apple n’est validé sur iPhone.** Les contrôles Windows portent sur les messages, les ressources et une interface simulée.
+Ce dossier prépare un essai japonais → français avec le framework Translation d’Apple. **L’application seule et le montage avec extension Safari compilent désormais avec Xcode ; aucun résultat de traduction Apple n’est encore validé sur iPhone.** [Compilation réussie du 14 novembre 2026](https://github.com/AlessioV96/jpfr-native-lab/actions/runs/43601246892), commit 15c10379f4825ed24b0d778600c4a0cf23e3d73b : les deux constructions et les deux tests du contrat Swift passent. Les IPA produites restent sans signature et ne sont pas installables telles quelles. Les contrôles Windows de l’interface utilisent un moteur simulé.
 
 Le prototype est séparé du traducteur vidéo existant. Il n’analyse pas de vidéo, n’enregistre pas le microphone et ne lit aucune page web. Son premier objectif est de comparer quatre phrases problématiques avec le moteur Apple. Un contrôle de 24 phrases est également prévu.
 
@@ -25,7 +25,7 @@ Exécuté sur Windows :
 - Fenêtre de contrôle dans Chrome : rendu du texte, absence d’interprétation HTML, arrêt et délai. Le moteur est simulé, jamais présenté comme un résultat Apple réel.
 - Ressources, plist, cibles et configuration de compilation contrôlées.
 
-À faire sur Mac : compiler le Swift et lier les frameworks Apple. À faire sur iPhone après installation : vérifier les langues, la fidélité des traductions, les délais, la mémoire, les annulations et le pont Safari. Un simulateur ou une compilation réussie ne valide pas ces points.
+Exécuté sur Mac : compilation Swift, liaison aux frameworks Apple, deux tests du contrat réussis, assemblage application et extension Safari. La structure des archives est contrôlée avant leur production. À faire sur iPhone après signature et installation : vérifier les langues, la fidélité des traductions, les délais, la mémoire, les annulations et le pont Safari. Une compilation réussie ne valide pas ces points.
 
 Les fichiers et méthodes du framework utilisés nécessitent iOS et un SDK **26.4 ou plus récent**. Cette version couvre l’iOS 27.2.1 déclaré pour l’appareil cible ; la disponibilité effective des modèles reste à vérifier sur cet appareil.
 
