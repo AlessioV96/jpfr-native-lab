@@ -1,0 +1,8 @@
+build/
+.build/
+*.xcodeproj/
+.swiftpm/
+*.ipa
+*.mobileprovision
+*.p12
+*.p8

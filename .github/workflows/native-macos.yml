@@ -1,0 +1,49 @@
+name: Vérifier le prototype natif sur Mac
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: jpfr-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-app:
+    if: github.event.repository.private == false
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Préparer le générateur du projet
+        run: command -v xcodegen >/dev/null || brew install xcodegen
+      - name: Compiler le laboratoire sans signature
+        run: bash native/Scripts/build-macos.sh app
+      - name: Conserver le prototype et son état de compilation
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: JPFRNativeLab-UNSIGNED
+          path: |
+            native/build/artifacts/JPFRNativeLab-UNSIGNED.ipa
+            native/build/artifacts/sdk-app.json
+            native/build/artifacts/build-app.log
+          retention-days: 1
+          if-no-files-found: error
+  safari-bridge:
+    if: github.event.repository.private == false
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Préparer le générateur du projet
+        run: command -v xcodegen >/dev/null || brew install xcodegen
+      - name: Vérifier la compilation du pont Safari
+        run: bash native/Scripts/build-macos.sh safari
+      - name: Conserver le pont expérimental et son état
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: JPFRSafariLab-UNSIGNED
+          path: |
+            native/build/artifacts/JPFRSafariLab-UNSIGNED.ipa
+            native/build/artifacts/sdk-safari.json
+            native/build/artifacts/build-safari.log
+          retention-days: 1
+          if-no-files-found: error

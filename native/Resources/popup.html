@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPFR natif — contrôle</title><link rel="stylesheet" href="popup.css">
+<main>
+<p class="eyebrow">PROTOTYPE NATIF · 0.1.0</p><h1>Tester la traduction Apple.</h1>
+<p>Ce contrôle transmet le texte au moteur natif de l’extension. Il n’est pas encore relié à la vidéo.</p>
+<label>Préférence<select id="strategy"><option value="highFidelity">Qualité</option><option value="lowLatency">Rapidité</option></select></label>
+<button id="check">Vérifier le moteur</button>
+<label>Exemple<select id="example"><option value="names">Expéditeur d’une lettre</option><option value="fees">Frais de bagages</option><option value="family">Famille</option><option value="rain">Match sous la pluie</option></select></label>
+<label>Japonais<textarea id="source" rows="4" maxlength="600">田中さんが山田さんから手紙を受け取りました。</textarea></label>
+<div class="actions"><button id="translate">Traduire cet exemple</button><button id="stop" disabled>Arrêter</button></div>
+<p id="status" role="status">L’application JPFR doit avoir préparé les langues.</p>
+<section><h2>Français reçu</h2><p id="result">Le texte traduit apparaîtra ici.</p></section>
+<small>Le modèle réellement choisi par Apple n’est pas mesuré. Aucun résultat n’est enregistré automatiquement. Ce prototype ne lit aucune page web et n’utilise pas le microphone.</small>
+</main><script src="protocol.js"></script><script src="popup.js"></script></html>

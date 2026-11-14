@@ -1,0 +1,70 @@
+name: JPFRNative
+options:
+  deploymentTarget:
+    iOS: "26.4"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "26.4"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    CODE_SIGN_STYLE: Automatic
+    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "0.1.0"
+    GENERATE_INFOPLIST_FILE: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  JPFRNativeLab:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Lab
+        excludes: [Resources]
+      - path: Lab/Resources/native-cases.json
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.jpfr.prototype.nativelab
+        APP_DISPLAY_NAME: JPFR natif
+        INFOPLIST_FILE: Lab/Info.plist
+  JPFRSafariLab:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Lab
+        excludes: [Resources]
+      - path: Lab/Resources/native-cases.json
+        buildPhase: resources
+    dependencies:
+      - target: JPFRNativeExtension
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.jpfr.prototype.safarilab
+        APP_DISPLAY_NAME: JPFR Safari
+        INFOPLIST_FILE: Lab/Info.plist
+  JPFRNativeExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Extension/SafariWebExtensionHandler.swift
+      - path: Resources
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.jpfr.prototype.safarilab.extension
+        INFOPLIST_FILE: Extension/Info.plist
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+schemes:
+  JPFRNativeLab:
+    build:
+      targets:
+        JPFRNativeLab: all
+  JPFRSafariLab:
+    build:
+      targets:
+        JPFRSafariLab: all

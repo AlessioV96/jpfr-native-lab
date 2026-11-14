@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "JPFR — laboratoire natif",
+  "version": "0.1.0",
+  "description": "Contrôle de traduction Apple japonais-français depuis une fenêtre Safari. Pas encore relié aux vidéos.",
+  "permissions": ["nativeMessaging"],
+  "background": {
+    "scripts": ["protocol.js", "native-rpc.js", "background.js"],
+    "persistent": false
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JPFR natif"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; style-src 'self'"
+  }
+}
