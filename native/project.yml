@@ -51,7 +51,7 @@ targets:
       - path: Shared
       - path: Extension/SafariWebExtensionHandler.swift
       - path: Resources
-        type: folder
+        type: group
         buildPhase: resources
     settings:
       base:

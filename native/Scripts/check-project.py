@@ -15,7 +15,10 @@ for name, target in spec['targets'].items():
     assert not any('Microphone' in key or 'SpeechRecognition' in key for key in info)
 extension = spec['targets']['JPFRNativeExtension']
 assert extension['settings']['base']['APPLICATION_EXTENSION_API_ONLY'] is True
-assert any(s['path'] == 'Resources' and s['type'] == 'folder' for s in extension['sources'])
+# iOS interdit un dossier Resources dans le bundle : copier les fichiers à plat.
+assert any(s['path'] == 'Resources' and s['type'] == 'group' for s in extension['sources'])
+assert not any(s.get('type') == 'folder' and Path(s['path']).name == 'Resources'
+               for s in extension['sources'])
 host = spec['targets']['JPFRNativeLab']
 assert not host.get('dependencies')
 corpus_bytes = (root / 'Lab/Resources/native-cases.json').read_bytes()
