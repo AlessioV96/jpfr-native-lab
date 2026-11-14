@@ -66,16 +66,8 @@ final class AppleTranslator {
         }
         let strategy = request.strategy!
         let translation = session(for: strategy)
-        if request.method == .status {
-            return NativeReply(id: request.id, ok: true, requestedStrategy: strategy,
-                               sessionReady: translation.isReady,
-                               canRequestDownloads: translation.canRequestDownloads)
-        }
-        guard translation.isReady else {
-            discardIdleSession()
-            return .failure(id: request.id, code: "needs-preparation",
-                            message: "Ouvrez l'application JPFR et préparez le japonais et le français.")
-        }
+        // Réserver le moteur avant le premier await : la vérification de
+        // disponibilité est elle-même asynchrone et doit pouvoir être arrêtée.
         activeID = request.id
         cancellation = nil
         let start = ProcessInfo.processInfo.systemUptime
@@ -89,6 +81,22 @@ final class AppleTranslator {
             activeID = nil
             cancellation = nil
         }
+        let ready = await translation.isReady
+        if let cancellation {
+            return .failure(id: request.id, code: cancellation,
+                            message: cancellation == "timeout" ? "Vérification native trop longue." : "Vérification arrêtée.")
+        }
+        if request.method == .status {
+            return NativeReply(id: request.id, ok: true, requestedStrategy: strategy,
+                               sessionReady: ready,
+                               canRequestDownloads: translation.canRequestDownloads)
+        }
+        guard ready else {
+            cachedSession = nil
+            cachedStrategy = nil
+            return .failure(id: request.id, code: "needs-preparation",
+                            message: "Ouvrez l'application JPFR et préparez le japonais et le français.")
+        }
         do {
             let result = try await translation.translate(request.text!)
             if let cancellation {
@@ -101,7 +109,7 @@ final class AppleTranslator {
             return NativeReply(id: request.id, ok: true, requestedStrategy: strategy,
                                text: result.targetText,
                                elapsedMs: (ProcessInfo.processInfo.systemUptime - start) * 1000,
-                               sessionReady: translation.isReady,
+                               sessionReady: ready,
                                canRequestDownloads: translation.canRequestDownloads)
         } catch {
             let code = cancellation ?? "native-failure"
